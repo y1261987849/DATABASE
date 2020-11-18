@@ -52,6 +52,7 @@ delete from Product;
 delete from Product
 where sale_price >= 4000;
 
+--一次性地从表中删除所有的数据并且不把单独的删除造作记录记入日志保存
 truncate Product;
 
 update Product
