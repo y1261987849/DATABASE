@@ -30,7 +30,7 @@ from SampleMath;
 --select n, p, n % p as mod_col
 --from SampleMath;
 
-select m, n, rount(m, n) as rount_col
+select m, n, round(m, n) as rount_col
 from SampleMath;
 
 create table SampleStr
@@ -83,18 +83,20 @@ where str1 in ('ABC', 'aBC', 'abc', '山田');
 
 select str1, str2, str3, replace(str1, str2, str3) as rep_str
 from SampleStr;
-
+9
 select str1, substring(str1 from 3 for 2) as sub_str
 from SampleStr;
 
-select str1, substring(str1, 3, 2) as sub_str
-from SampleStr;
+--SQL server
+--select str1, substring(str1, 3, 2) as sub_str
+--from SampleStr;
 
 select current_date;
 
 --SQL server
 --使用cast()函数将current_timestamp转换为日期类型
 --select cast(current_timestamp as date) as cur_date;
+
 
 select current_time;
 
@@ -130,6 +132,145 @@ select coalesce(NULL, 1) as col_1,
 
 select coalesce(str2, 'NULL')
 from SampleStr;
+
+create table SampleLike
+(strcol varchar(6) NOT NULL,
+ PRIMARY KEY(strcol));
+
+begin transaction;
+
+insert into SampleLike (strcol) values('abcddd');
+insert into SampleLike (strcol) values('dddabc');
+insert into SampleLike (strcol) values('abdddc');
+insert into SampleLike (strcol) values('abcdd');
+insert into SampleLike (strcol) values('ddabc');
+insert into SampleLike (strcol) values('abddc');
+
+commit;
+
+select *
+from SampleLike
+where strcol like 'ddd%'
+
+select *
+from SampleLike
+where strcol like '%ddd%';
+
+select *
+from SampleLike
+where strcol like '%ddd';
+
+select *
+from SampleLike
+where strcol like 'abc__';
+
+select product_name, sale_price
+from Product
+where sale_price between 100 and 1000;
+
+select product_name, purchase_price
+from Product
+where purchase_price IS NULL;
+
+select product_name, purchase_price
+from Product
+where purchase_price in (320, 500, 5000);
+
+create table ShopProduct
+(shop_id char(4) NOT NULL,
+ shop_name varchar(200) NOT NULL,
+ product_id char(4) NOT NULL,
+ quantity integer NOT NULL,
+ PRIMARY KEY (shop_id, product_id));
+
+begin transaction;
+
+insert into ShopProduct
+values('000A', '东京', '0001'， 30),
+	  ('000A', '东京', '0002'， 50);
+
+select product_name, sale_price
+from Product
+where product_id in(select product_id
+					from ShopProduct
+					where shop_id = '000C');
+
+select product_name, sale_price
+from Product as P
+where exists (select *
+			  from ShopProduct as SP
+			  where SP.shop_id = '000C'
+			  and SP.product_id = P.product_id)
+
+select product_name,
+	   case when product_type = '衣服'
+	   		then 'A:' + product_type
+	   		when product_type = '办公用品'
+	   		then 'B:' + product_type
+	   		when product_type = '厨房用具'
+	   		then 'C:' + product_type
+	   		else NULL
+	   	end as abc_product_type
+from Product;
+
+select product_type, sum(sale_price) as sum_price
+from Product
+group by product_type;
+
+select sum(case when product_type = '衣服'
+				then sale_price else 0 end) as sum_price_clothes,
+	   sum(case when product_type = '厨房用具'
+	   			then sale_price else 0 end) as sum_price_kitchen,
+	   sum(case when product_type = '办公用品'
+	   			then sale_price else 0 end) as sum_price_office
+from Product;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
