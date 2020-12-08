@@ -13,7 +13,7 @@ select
 case when SP.shop_id is null
 					then '不确定' 
 					else SP.shop_id 
-					end as shop_id
+					end as shop_id,
 case when SP.shop_name is null
 					then '不确定'
 					else SP.shop_name
